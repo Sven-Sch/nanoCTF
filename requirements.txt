@@ -1,0 +1,22 @@
+# Webservice
+Flask
+flask_mongoengine
+flask_security
+flask_themes2
+flask_admin
+WTForms
+
+
+# encryption / hashing
+bcrypt
+
+
+# Documentation
+sphinx
+sphinx_rtd_theme
+
+
+# Code analysis
+pylint
+pep8
+flake8

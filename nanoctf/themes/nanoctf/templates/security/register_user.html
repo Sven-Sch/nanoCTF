@@ -1,0 +1,25 @@
+{% from theme("_macros.html") import render_field_with_errors, render_field %}
+{% extends theme("layout.html") %}
+{% set page = 'register' %}
+
+{% block content %}
+<h1>Register</h1>
+
+<form class="form-horizontal" action="{{ theme(url_for_security('register')) }}" method="POST"
+      name="register_user_form">
+    {{ register_user_form.hidden_tag() }}
+    {{ render_field_with_errors(register_user_form.username, class_="form-control") }}
+    {{ render_field_with_errors(register_user_form.email, class_="form-control") }}
+    {{ render_field_with_errors(register_user_form.firstname, class_="form-control") }}
+    {{ render_field_with_errors(register_user_form.lastname, class_="form-control") }}
+    {{ render_field_with_errors(register_user_form.password, class_="form-control") }}
+    {%- if register_user_form.password_confirm %}
+    {{ render_field_with_errors(register_user_form.password_confirm, class_="form-control") }}
+    {%- endif %}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-6">
+            {{ render_field(register_user_form.submit, class_='btn btn-primary') }}
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nanoCTF</title>
+
+    <link rel=stylesheet href="{{ theme_static('css/bootstrap.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+{% include theme('_navbar.html') %}
+
+<div class="container">
+    {% include theme("_messages.html") %}
+    {% block content %}{% endblock %}
+</div>
+
+<script src="{{ theme_static('js/jquery.min.js') }}"></script>
+<script src="{{ theme_static('js/bootstrap.min.js') }}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

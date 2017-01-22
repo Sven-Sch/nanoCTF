@@ -1,36 +1,37 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-This module contains methods to create the ``app`` object of nanoCTF.
+The nanoctf module contains the core of *nanoctf* (app instance, views/routes).
 
-First the app is created and the configuration is loaded. After that the core
-modules will be registered to the ``app``. Finally the user modules (plugins)
-will be loaded.
+:author: Sven Sch.
 """
 
-from nanoctf.core.app import NanoctfApp
-from nanoctf.ext import configure_extension, configure_extensions
+from flask import Flask
+from flask import render_template
+from flask_security import Security, MongoEngineUserDatastore
+from nanoctf.data import db
+from nanoctf.core.dbmodel import User, Role
+from nanoctf.core.forms import ExtendedRegisterForm
+
+app = Flask(__name__, static_folder='web/static', template_folder='web/templates')
+app.config.from_object('nanoctf.config.DevConfig')
+
+db.init_app(app)
+
+# Setup Flask-Security
+user_datastore = MongoEngineUserDatastore(db, User, Role)
+security = Security(app, user_datastore, register_form=ExtendedRegisterForm)
 
 
-def create_app_base(config=None, ext_list=None, **settings):
+@app.route('/')
+@app.route('/index')
+def index():
     """
-    Creates the basic ``flask`` app and loads all core modules (listed in the
-    config file). The created ``app`` will be returned.
+    Renders the HTML template for the *index* page, i.e. HTTP requests to `/` and `/index`.
 
-    Args:
-        config: An object containing the configuration for nanoCTF.
-    Returns:
-         The created ``app`` with all it's core modules.
+    :return: The rendered `index.html` page from `templates` folder
     """
-    app = NanoctfApp('nanoctf')
-    app.config.load_nanoctf_config(config=config)
-    if ext_list:
-        for ext in ext_list:
-            configure_extension(ext, app=app)
-    return app
+    return render_template('index.html')
 
 
-def create_app(config=None, **settings):
-    app = create_app_base(config=config)
-    configure_extensions(app)
-    return app
+if __name__ == '__main__':
+    app.run(host=app.config['HOST'], port=app.config['PORT'])
